@@ -9,9 +9,10 @@ export function serverUrl_fn() {
   let baseUrl = serverurl ? serverurl : window.location.origin + "/api/app";
   return baseUrl;
 }
-export const appInfo = {
+export const appInfo = { 
+  appName: "Medcei Sign"
   applogo: logo,
-  appId: process.env.REACT_APP_APPID ? process.env.REACT_APP_APPID : "opensign",
+  appId: process.env.REACT_APP_APPID ? process.env.REACT_APP_APPID : "medcei-sign",
   baseUrl: serverUrl_fn(),
   defaultRole: "contracts_User",
   fev_Icon:
@@ -20,7 +21,7 @@ export const appInfo = {
     ? `${process.env.REACT_APP_GOOGLECLIENTID}`
     : "",
   metaDescription:
-    "The fastest way to sign PDFs & request signatures from others.",
+    "Plataforma de assinaturas digitais da Medcei.",
   settings: [
     {
       role: "contracts_Admin",
