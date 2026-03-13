@@ -10,7 +10,7 @@ export function serverUrl_fn() {
   return baseUrl;
 }
 export const appInfo = { 
-  appName: "Medcei Sign"
+  appName: "Medcei Sign",
   applogo: logo,
   appId: process.env.REACT_APP_APPID ? process.env.REACT_APP_APPID : "medcei-sign",
   baseUrl: serverUrl_fn(),
