@@ -8,8 +8,8 @@ module.exports = {
     require("daisyui"),
     function ({ addUtilities, addVariant }) {
       // ✅ Variants that match html[data-theme="..."] (or any ancestor with data-theme)
-      addVariant("opensigncss", '[data-theme="opensigncss"] &');
-      addVariant("opensigndark", '[data-theme="opensigndark"] &');
+      addVariant("medceilight", '[data-theme="opensigncss"] &');
+      addVariant("medceidark", '[data-theme="opensigndark"] &');
 
       addUtilities({
         // Prevent iOS long-press popup
@@ -31,23 +31,23 @@ module.exports = {
           }
         },
         // Dark mode icon improvements using DaisyUI theme detection
-        '[data-theme="opensigndark"] .icon-improved': {
+        '[data-theme="medceidark"] .icon-improved': {
           color: "#CCCCCC !important"
         },
-        '[data-theme="opensigndark"] .icon-muted': {
+        '[data-theme="medceidark"] .icon-muted': {
           color: "#999999 !important"
         },
-        '[data-theme="opensigndark"] .icon-disabled': {
+        '[data-theme="medceidark"] .icon-disabled': {
           color: "#858585 !important"
         },
         // Gray text improvements for dark mode
-        '[data-theme="opensigndark"] .text-gray-500': {
+        '[data-theme="medceidark"] .text-gray-500': {
           color: "#CCCCCC !important"
         },
-        '[data-theme="opensigndark"] .text-gray-400': {
+        '[data-theme="medceidark"] .text-gray-400': {
           color: "#999999 !important"
         },
-        '[data-theme="opensigndark"] .text-gray-600': {
+        '[data-theme="medceidark"] .text-gray-600': {
           color: "#CCCCCC !important"
         },
         // CSS variable utilities that work with arbitrary values
@@ -79,23 +79,23 @@ module.exports = {
     // themes: true,
     themes: [
       {
-        opensigndark: {
-          primary: "#007ACC", // VS Code blue - CTA & highlight color
+        medceidark: {
+          primary: "#006B4F", // VS Code blue - CTA & highlight color
           "primary-content": "#FFFFFF",
 
-          secondary: "#1F2937", // Sidebar background (darker slate)
-          "secondary-content": "#E5E7EB",
+          secondary: "#00A878", // Sidebar background (darker slate)
+          "secondary-content": "#FFFFFF",
 
-          accent: "#4A9EFF", // Lighter VS Code blue for hover, minor CTA
-          "accent-content": "#FFFFFF",
+          accent: "#FFCC33", // Lighter VS Code blue for hover, minor CTA
+          "accent-content": "#1A1A1A",
 
-          neutral: "#3C3C3C", // VS Code inactive/disabled element background
-          "neutral-content": "#CCCCCC", // VS Code inactive text color
+          neutral: "#1A1A1A", // VS Code inactive/disabled element background
+          "neutral-content": "#E6E6E6", // VS Code inactive text color
 
-          "base-100": "#121212", // App background
-          "base-200": "#181818", // Slight elevation (cards)
-          "base-300": "#1E1E1E", // Further elevated items (panels)
-          "base-content": "#F3F4F6", // Main text color (soft white)
+          "base-100": "#0F0F0F", // App background
+          "base-200": "#1A1A1A", // Slight elevation (cards)
+          "base-300": "#262626", // Further elevated items (panels)
+          "base-content": "#F2F2F2", // Main text color (soft white)
 
           info: "#2563EB", // For info panels like "Out for signature"
           success: "#22C55E", // Optional: for completed docs or alerts
@@ -121,19 +121,19 @@ module.exports = {
         }
       },
       {
-        opensigncss: {
-          primary: "#002864",
-          "primary-content": "#cacccf",
-          secondary: "#29354a",
-          "secondary-content": "#c8d1e0",
-          accent: "#E10032",
-          "accent-content": "#ffd8d5",
-          neutral: "#c1ccdb",
-          "neutral-content": "#111312",
-          "base-100": "#ffffff",
-          "base-200": "#dedede",
-          "base-300": "#bebebe",
-          "base-content": "#161616",
+        medceilight: {
+          primary: "#006B4F",
+          "primary-content": "#FFFFFF",
+          secondary: "#00A878",
+          "secondary-content": "#FFFFFF",
+          accent: "#FFCC33",
+          "accent-content": "#1A1A1A",
+          neutral: "#D9D9D9",
+          "neutral-content": "#0F0F0F",
+          "base-100": "#FFFFFF",
+          "base-200": "#F2F2F2",
+          "base-300": "#E6E6E6",
+          "base-content": "#0F0F0F",
           info: "#00b6ff",
           "info-content": "#f5f5f4",
           success: "#00a96e",
