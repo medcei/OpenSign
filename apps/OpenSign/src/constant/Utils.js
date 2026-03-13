@@ -2655,7 +2655,7 @@ export const getAppLogo = async () => {
     if (tenant) {
       const resolvedFavicon =
         tenant?.favicon || tenant?.logo || appInfo.fev_Icon;
-      localStorage.setItem("appname", "OpenSign™");
+      localStorage.setItem("appname", "Medcei Sign™");
       localStorage.setItem("favicon", appInfo.fev_Icon);
       return {
         logo: tenant?.logo,
