@@ -8,8 +8,8 @@ module.exports = {
     require("daisyui"),
     function ({ addUtilities, addVariant }) {
       // ✅ Variants that match html[data-theme="..."] (or any ancestor with data-theme)
-      addVariant("medceilight", '[data-theme="medceilight"] &');
-      addVariant("medceidark", '[data-theme="medceidark"] &');
+      addVariant("opensigncss", '[data-theme="opensigncss"] &');
+      addVariant("opensigndark", '[data-theme="opensigndark"] &');
 
       addUtilities({
         // Prevent iOS long-press popup
@@ -31,23 +31,23 @@ module.exports = {
           }
         },
         // Dark mode icon improvements using DaisyUI theme detection
-        '[data-theme="medceidark"] .icon-improved': {
+        '[data-theme="opensigndark"] .icon-improved': {
           color: "#CCCCCC !important"
         },
-        '[data-theme="medceidark"] .icon-muted': {
+        '[data-theme="opensigndark"] .icon-muted': {
           color: "#999999 !important"
         },
-        '[data-theme="medceidark"] .icon-disabled': {
+        '[data-theme="opensigndark"] .icon-disabled': {
           color: "#858585 !important"
         },
         // Gray text improvements for dark mode
-        '[data-theme="medceidark"] .text-gray-500': {
+        '[data-theme="opensigndark"] .text-gray-500': {
           color: "#CCCCCC !important"
         },
-        '[data-theme="medceidark"] .text-gray-400': {
+        '[data-theme="opensigndark"] .text-gray-400': {
           color: "#999999 !important"
         },
-        '[data-theme="medceidark"] .text-gray-600': {
+        '[data-theme="opensigndark"] .text-gray-600': {
           color: "#CCCCCC !important"
         },
         // CSS variable utilities that work with arbitrary values
@@ -79,7 +79,7 @@ module.exports = {
     // themes: true,
     themes: [
       {
-        medceidark: {
+        opensigndark: {
           primary: "#006B4F", // VS Code blue - CTA & highlight color
           "primary-content": "#FFFFFF",
 
@@ -121,7 +121,7 @@ module.exports = {
         }
       },
       {
-        medceilight: {
+        opensigncss: {
           primary: "#006B4F",
           "primary-content": "#FFFFFF",
           secondary: "#00A878",
