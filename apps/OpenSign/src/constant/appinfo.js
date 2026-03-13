@@ -11,7 +11,7 @@ export function serverUrl_fn() {
 }
 export const appInfo = { 
   appName: "Medcei Sign",
-  applogo: logo,
+  applogo: "/assets/images/logo-medcei.png",
   appId: process.env.REACT_APP_APPID ? process.env.REACT_APP_APPID : "medcei-sign",
   baseUrl: serverUrl_fn(),
   defaultRole: "contracts_User",
