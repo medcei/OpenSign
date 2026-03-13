@@ -8,8 +8,8 @@ module.exports = {
     require("daisyui"),
     function ({ addUtilities, addVariant }) {
       // ✅ Variants that match html[data-theme="..."] (or any ancestor with data-theme)
-      addVariant("medceilight", '[data-theme="opensigncss"] &');
-      addVariant("medceidark", '[data-theme="opensigndark"] &');
+      addVariant("medceilight", '[data-theme="medceilight"] &');
+      addVariant("medceidark", '[data-theme="medceidark"] &');
 
       addUtilities({
         // Prevent iOS long-press popup
