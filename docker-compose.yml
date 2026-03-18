@@ -36,7 +36,7 @@ services:
     depends_on:
       - server
     expose:
-      - '3001'
+      - '3000'
     environment:
       PUBLIC_URL: 'https://sign.medcei.com'
       REACT_APP_SERVERURL: 'https://api-sign.medcei.com/app'
@@ -48,7 +48,7 @@ services:
       - 'traefik.http.routers.opensign-web.rule=Host(`sign.medcei.com`)'
       - 'traefik.http.routers.opensign-web.entrypoints=https'
       - 'traefik.http.routers.opensign-web.tls=true'
-      - 'traefik.http.services.opensign-web.loadbalancer.server.port=3001'
+      - 'traefik.http.services.opensign-web.loadbalancer.server.port=3000'
     networks:
       - default
       - coolify
