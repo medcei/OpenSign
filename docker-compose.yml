@@ -5,7 +5,9 @@ services:
     volumes:
       - 'mongo-data:/data/db'
   server:
-    image: 'opensign/opensignserver:main'
+    build:
+      context: ./apps/OpenSignServer
+      dockerfile: Dockerhubfile
     restart: unless-stopped
     depends_on:
       - mongo
@@ -31,7 +33,9 @@ services:
       - default
       - coolify
   client:
-    image: 'opensign/opensign:main'
+    build:
+      context: ./apps/OpenSign
+      dockerfile: Dockerhubfile
     restart: unless-stopped
     depends_on:
       - server
