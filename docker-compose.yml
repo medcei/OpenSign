@@ -20,6 +20,12 @@ services:
       APP_ID: opensign
       USE_LOCAL: 'true'
       SMTP_ENABLE: 'false'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.opensign-api.rule=Host(`api-sign.medcei.com`)'
+      - 'traefik.http.routers.opensign-api.entrypoints=websecure'
+      - 'traefik.http.routers.opensign-api.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.opensign-api.loadbalancer.server.port=8080'
   client:
     image: 'opensign/opensign:main'
     restart: unless-stopped
@@ -32,5 +38,11 @@ services:
       REACT_APP_SERVERURL: 'https://api-sign.medcei.com/app'
       REACT_APP_APPID: opensign
       GENERATE_SOURCEMAP: 'false'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.opensign-web.rule=Host(`sign.medcei.com`)'
+      - 'traefik.http.routers.opensign-web.entrypoints=websecure'
+      - 'traefik.http.routers.opensign-web.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.opensign-web.loadbalancer.server.port=3001'
 volumes:
   mongo-data: null
