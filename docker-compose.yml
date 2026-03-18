@@ -6,8 +6,8 @@ services:
       - 'mongo-data:/data/db'
   server:
     build:
-      context: ./apps/OpenSignServer
-      dockerfile: Dockerhubfile
+      context: .
+      dockerfile: ./apps/OpenSignServer/Dockerhubfile
     restart: unless-stopped
     depends_on:
       - mongo
@@ -34,8 +34,8 @@ services:
       - coolify
   client:
     build:
-      context: ./apps/OpenSign
-      dockerfile: Dockerhubfile
+      context: .
+      dockerfile: ./apps/OpenSign/Dockerhubfile
     restart: unless-stopped
     depends_on:
       - server
