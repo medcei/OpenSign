@@ -22,10 +22,14 @@ services:
       SMTP_ENABLE: 'false'
     labels:
       - 'traefik.enable=true'
+      - 'traefik.docker.network=coolify'
       - 'traefik.http.routers.opensign-api.rule=Host(`api-sign.medcei.com`)'
       - 'traefik.http.routers.opensign-api.entrypoints=https'
       - 'traefik.http.routers.opensign-api.tls=true'
       - 'traefik.http.services.opensign-api.loadbalancer.server.port=8080'
+    networks:
+      - default
+      - coolify
   client:
     image: 'opensign/opensign:main'
     restart: unless-stopped
@@ -40,9 +44,16 @@ services:
       GENERATE_SOURCEMAP: 'false'
     labels:
       - 'traefik.enable=true'
+      - 'traefik.docker.network=coolify'
       - 'traefik.http.routers.opensign-web.rule=Host(`sign.medcei.com`)'
       - 'traefik.http.routers.opensign-web.entrypoints=https'
       - 'traefik.http.routers.opensign-web.tls=true'
       - 'traefik.http.services.opensign-web.loadbalancer.server.port=3001'
+    networks:
+      - default
+      - coolify
 volumes:
   mongo-data: null
+networks:
+  coolify:
+    external: true
