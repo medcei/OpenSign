@@ -1,62 +1,36 @@
 services:
-  server:
-    image: opensign/opensignserver:main
-    container_name: OpenSignServer-container
+  mongo:
+    image: 'mongo:6'
+    restart: unless-stopped
     volumes:
-      - opensign-files:/usr/src/app/files
-    ports:
-      - "8080:8080"
+      - 'mongo-data:/data/db'
+  server:
+    image: 'opensign/opensignserver:main'
+    restart: unless-stopped
     depends_on:
       - mongo
-    env_file: .env.prod
+    expose:
+      - '8080'
     environment:
-      - NODE_ENV=production
-      - SERVER_URL=${HOST_URL:-https://localhost:3001}/api/app
-      - PUBLIC_URL=${HOST_URL:-https://localhost:3001}
-    networks:
-      - app-network
-  mongo:
-    image: mongo:latest
-    container_name: mongo-container
-    volumes:
-      - data-volume:/data/db
-    ports:
-      - "27018:27017"
-    networks:
-      - app-network
+      PUBLIC_URL: 'https://sign.medcei.com'
+      SERVER_URL: 'https://api-sign.medcei.com/app'
+      MONGODB_URI: 'mongodb://mongo:27017/OpenSignDB'
+      MASTER_KEY: 9fd4sdf9sdf9sdf9sdf9sdf9
+      PARSE_MOUNT: /app
+      APP_ID: opensign
+      USE_LOCAL: 'true'
+      SMTP_ENABLE: 'false'
   client:
-    image: opensign/opensign:main
-    container_name: OpenSign-container
+    image: 'opensign/opensign:main'
+    restart: unless-stopped
     depends_on:
       - server
-    env_file: .env.prod  
-    ports:
-      - "3000:3000"
-    networks:
-      - app-network
-  caddy:
-    image: caddy:latest
-    container_name: caddy-container
-    ports:
-      - "3001:3001"
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
-    networks:
-      - app-network
+    expose:
+      - '3001'
     environment:
-      - HOST_URL=${HOST_URL:-localhost:3001}
-networks:
-  app-network:
-    driver: bridge
-
+      PUBLIC_URL: 'https://sign.medcei.com'
+      REACT_APP_SERVERURL: 'https://api-sign.medcei.com/app'
+      REACT_APP_APPID: opensign
+      GENERATE_SOURCEMAP: 'false'
 volumes:
-  data-volume:
-  web-root:
-  caddy_data:
-  caddy_config:
-  opensign-files:
+  mongo-data: null
