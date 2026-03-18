@@ -32,7 +32,7 @@ services:
     depends_on:
       - server
     expose:
-      - '3000'
+      - '3001'
     environment:
       PUBLIC_URL: 'https://sign.medcei.com'
       REACT_APP_SERVERURL: 'https://api-sign.medcei.com/app'
@@ -43,6 +43,6 @@ services:
       - 'traefik.http.routers.opensign-web.rule=Host(`sign.medcei.com`)'
       - 'traefik.http.routers.opensign-web.entrypoints=https'
       - 'traefik.http.routers.opensign-web.tls=true'
-      - 'traefik.http.services.opensign-web.loadbalancer.server.port=3000'
+      - 'traefik.http.services.opensign-web.loadbalancer.server.port=3001'
 volumes:
   mongo-data: null
