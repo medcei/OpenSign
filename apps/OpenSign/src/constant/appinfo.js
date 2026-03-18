@@ -1,4 +1,4 @@
-import logo from "../assets/images/logo.png";
+import logoMedcei from "../assets/images/logo.png";
 import { getEnv } from "./Utils";
 
 export function serverUrl_fn() {
@@ -9,10 +9,12 @@ export function serverUrl_fn() {
   let baseUrl = serverurl ? serverurl : window.location.origin + "/api/app";
   return baseUrl;
 }
-export const appInfo = { 
+export const appInfo = {
   appName: "Medcei Sign",
-  applogo: "/assets/images/logo-medcei.png",
-  appId: process.env.REACT_APP_APPID ? process.env.REACT_APP_APPID : "medcei-sign",
+  applogo: logoMedcei,
+  appId: process.env.REACT_APP_APPID
+    ? process.env.REACT_APP_APPID
+    : "medcei-sign",
   baseUrl: serverUrl_fn(),
   defaultRole: "contracts_User",
   fev_Icon:
@@ -20,8 +22,7 @@ export const appInfo = {
   googleClietId: process.env.REACT_APP_GOOGLECLIENTID
     ? `${process.env.REACT_APP_GOOGLECLIENTID}`
     : "",
-  metaDescription:
-    "Plataforma de assinaturas digitais da Medcei.",
+  metaDescription: "Plataforma de assinaturas digitais da Medcei.",
   settings: [
     {
       role: "contracts_Admin",
