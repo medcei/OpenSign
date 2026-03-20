@@ -29,7 +29,7 @@ export const cellsWidget = "cells";
 export function getEnv() {
   return window?.RUNTIME_ENV || {};
 }
-const appName = "OpenSign™";
+const appName = "MedceiSign™";
 
 export const defaultMailBody = `<p>Hi {{receiver_name}},</p><br><p>We hope this email finds you well. {{sender_name}}&nbsp;has requested you to review and sign&nbsp;{{document_title}}.</p><p>Your signature is crucial to proceed with the next steps as it signifies your agreement and authorization.</p><br><p><a href='{{signing_url}}' rel='noopener noreferrer' target='_blank'>Sign here</a></p><br><br><p>If you have any questions or need further clarification regarding the document or the signing process,  please contact the sender.</p><br><p>Thanks</p><p> Team ${appName}</p><br>`;
 export const defaultMailSubject = `{{sender_name}} has requested you to sign {{document_title}}`;
