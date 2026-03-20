@@ -3,14 +3,11 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router";
 
 const Menu = ({ item, isOpen, closeSidebar }) => {
-  const appName =
-    "OpenSign™";
-  const drivename = appName === "OpenSign™" ? "OpenSign™" : "";
   const { t } = useTranslation();
   const { selectedMenu } = useSelector((state) => state.sidebar);
 
   return (
-    <li key={item.title} role="none" className="my-0.5">
+    <li key={item.title} role="none" className="my-1">
       <NavLink
         to={
           item.pageType
@@ -18,17 +15,33 @@ const Menu = ({ item, isOpen, closeSidebar }) => {
             : `/${item.objectId}`
         }
         className={({ isActive }) =>
-          `${isActive && selectedMenu ? "bg-base-300 text-base-content" : ""} flex gap-x-5 items-center justify-start text-left p-3 text-base-content hover:text-base-content focus:bg-base-300 hover:bg-base-300 hover:no-underline focus:outline-none`
+          `
+          flex gap-x-4 items-center justify-start text-left p-3 rounded-md transition-all duration-200
+          
+          ${
+            isActive && selectedMenu
+              ? "bg-[#1D8F6A] text-white shadow"
+              : "text-white"
+          }
+
+          hover:bg-[#1D8F6A]
+          hover:text-white
+          focus:bg-[#1D8F6A]
+          focus:outline-none
+        `
         }
         onClick={() => closeSidebar(item.title)}
         tabIndex={isOpen ? 0 : -1}
         role="menuitem"
       >
+        {/* Ícone */}
         <span className="w-[20px] h-[20px] flex justify-center">
-          <i className={`${item.icon} text-[20px]`} aria-hidden="true"></i>
+          <i className={`${item.icon} text-[18px]`} aria-hidden="true"></i>
         </span>
-        <span className="flex items-center mb-0.5">
-          {t(`sidebar.${item.title}`, { appName: drivename })}
+
+        {/* Texto */}
+        <span className="flex items-center">
+          {t(`sidebar.${item.title}`)}
         </span>
       </NavLink>
     </li>
