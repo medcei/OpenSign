@@ -89,10 +89,10 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
   }, [isOpen]);
 
   return (
-    <div className="op-navbar shadow touch-none bg-[#1E3A8A] text-white">
+    <div className="op-navbar shadow touch-none bg-[#1D8F6A] text-white border-b border-[#166B50]">
       <div className="flex-none">
         <button
-          className="op-btn op-btn-square op-btn-ghost focus:outline-none hover:bg-transparent op-btn-sm no-animation"
+          className="op-btn op-btn-square op-btn-ghost focus:outline-none hover:bg-[#166B50] op-btn-sm no-animation border-0"
           onClick={showSidebar}
         >
           <i className="fa-light fa-bars text-xl text-white"></i>
@@ -102,15 +102,15 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
       <div className="flex-1 ml-2">
         <div
           onClick={() => navigate("/dashboard/35KBoSgoAK")}
-          className="flex items-center gap-2 h-[35px] md:h-[45px] cursor-pointer"
+          className="flex items-center gap-3 h-[38px] md:h-[48px] cursor-pointer"
         >
           <img
             className="object-contain h-full w-auto"
             src={medceiLogo}
             alt="Medcei logo"
           />
-          <span className="font-semibold text-lg text-white hidden md:block">
-            Medcei Sign
+          <span className="font-semibold text-lg text-white hidden md:block tracking-wide">
+            MEDCEI
           </span>
         </div>
       </div>
@@ -123,10 +123,10 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
         {width >= 768 && (
           <div
             onClick={toggleDropdown}
-            className="cursor-pointer w-[35px] h-[35px] rounded-full ring-[1px] ring-offset-2 ring-gray-300 overflow-hidden"
+            className="cursor-pointer w-[35px] h-[35px] rounded-full ring-[1px] ring-offset-2 ring-white/40 overflow-hidden"
           >
             <img
-              className="w-[35px] h-[35px] object-contain"
+              className="w-[35px] h-[35px] object-contain bg-white"
               src={image}
               alt="Profile"
             />
@@ -159,7 +159,7 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
 
           <ul
             tabIndex={0}
-            className={`mt-4 z-[1] p-2 shadow op-dropdown-open op-menu op-menu-sm op-dropdown-content text-white bg-[#0F172A] rounded-box w-56 ${
+            className={`mt-4 z-[1] p-2 shadow-lg op-dropdown-open op-menu op-menu-sm op-dropdown-content text-white bg-[#166B50] rounded-box w-56 border border-[#0F4F3C] ${
               isOpen ? "" : "hidden"
             }`}
           >
@@ -171,7 +171,7 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
                     navigate("/profile");
                   }}
                 >
-                  <span>
+                  <span className="hover:bg-[#1D8F6A] rounded-md">
                     <i className="fa-light fa-user"></i> {t("profile")}
                   </span>
                 </li>
@@ -182,7 +182,7 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
                     navigate("/changepassword");
                   }}
                 >
-                  <span>
+                  <span className="hover:bg-[#1D8F6A] rounded-md">
                     <i className="fa-light fa-lock"></i>{" "}
                     {t("change-password")}
                   </span>
@@ -194,17 +194,17 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
                     navigate("/verify-document");
                   }}
                 >
-                  <span>
+                  <span className="hover:bg-[#1D8F6A] rounded-md">
                     <i className="fa-light fa-check-square"></i>{" "}
                     {t("verify-document")}
                   </span>
                 </li>
 
                 <li>
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center gap-2 hover:bg-[#1D8F6A] rounded-md">
                     <i className="fa-light fa-moon"></i>
                     {t("dark-mode")}
-                    <span className="text-[10px] font-semibold bg-slate-600 text-white px-1 rounded-md">
+                    <span className="text-[10px] font-semibold bg-[#0F4F3C] text-white px-1 rounded-md">
                       BETA
                     </span>
                     <ThemeToggle />
@@ -214,7 +214,7 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
             )}
 
             <li onClick={handleLogout}>
-              <span>
+              <span className="hover:bg-[#1D8F6A] rounded-md">
                 <i className="fa-light fa-arrow-right-from-bracket"></i>{" "}
                 {t("log-out")}
               </span>
