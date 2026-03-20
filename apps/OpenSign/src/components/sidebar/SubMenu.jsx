@@ -3,29 +3,28 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router";
 
 const Submenu = ({ item, closeSidebar, toggleSubmenu, submenuOpen }) => {
-  const appName =
-    "OpenSign™";
-  const drivename = appName === "OpenSign™" ? "OpenSign™" : "";
   const { t } = useTranslation();
   const { title, icon, children } = item;
   const { selectedMenu } = useSelector((state) => state.sidebar);
 
   return (
-    <li role="none" className="my-0.5">
+    <li role="none" className="my-1">
       <button
         onClick={() => toggleSubmenu(item.title)}
-        className="flex gap-x-5 items-center justify-start text-left p-3 text-base-content hover:text-base-content focus:bg-base-300 hover:bg-base-300 hover:no-underline focus:outline-none"
-        aria-expanded={submenuOpen}
+        className="flex gap-x-4 items-center justify-start text-left p-3 rounded-md w-full text-white hover:bg-[#1D8F6A] focus:bg-[#1D8F6A] hover:no-underline focus:outline-none transition-all duration-200"
+        aria-expanded={submenuOpen[item.title]}
         aria-haspopup="true"
         aria-controls={`submenu-${title}`}
       >
         <span className="w-[20px] h-[20px] flex justify-center">
-          <i className={`${icon} text-[20px]`}></i>
+          <i className={`${icon} text-[18px]`} aria-hidden="true"></i>
         </span>
+
         <div className="flex justify-between items-center w-full">
-          <span className="flex items-center mb-0.5">
-            {t(`sidebar.${item.title}`, { appName })}
+          <span className="flex items-center">
+            {t(`sidebar.${item.title}`)}
           </span>
+
           <i
             className={`${
               submenuOpen[item.title]
@@ -36,10 +35,16 @@ const Submenu = ({ item, closeSidebar, toggleSubmenu, submenuOpen }) => {
           ></i>
         </div>
       </button>
+
       {submenuOpen[item.title] && (
-        <ul id={`submenu-${title}`} role="menu" aria-label={`${title} submenu`}>
+        <ul
+          id={`submenu-${title}`}
+          role="menu"
+          aria-label={`${title} submenu`}
+          className="mt-1 ml-2"
+        >
           {children.map((childItem) => (
-            <li key={childItem.title} role="none" className="my-0.5">
+            <li key={childItem.title} role="none" className="my-1">
               <NavLink
                 to={
                   childItem.pageType
@@ -47,22 +52,32 @@ const Submenu = ({ item, closeSidebar, toggleSubmenu, submenuOpen }) => {
                     : `/${childItem.objectId}`
                 }
                 className={({ isActive }) =>
-                  `${isActive && selectedMenu ? "bg-base-300 text-base-content" : ""} pl-4 flex items-center gap-x-5 py-2 text-sm cursor-pointer text-base-content hover:text-base-content focus:bg-base-300 hover:bg-base-300 hover:no-underline focus:outline-none`
+                  `
+                  pl-4 flex items-center gap-x-4 py-2 pr-3 text-sm rounded-md transition-all duration-200
+                  ${
+                    isActive && selectedMenu
+                      ? "bg-[#1D8F6A] text-white shadow"
+                      : "text-[#DDF3EC]"
+                  }
+                  hover:bg-[#1D8F6A]
+                  hover:text-white
+                  focus:bg-[#1D8F6A]
+                  focus:outline-none
+                `
                 }
                 onClick={() => closeSidebar(childItem.title)}
                 role="menuitem"
-                tabIndex={submenuOpen ? 0 : -1}
+                tabIndex={submenuOpen[item.title] ? 0 : -1}
               >
                 <span className="w-[18px] h-[18px] flex justify-center">
                   <i
-                    className={`${childItem.icon} text-[18px]`}
+                    className={`${childItem.icon} text-[16px]`}
                     aria-hidden="true"
                   ></i>
                 </span>
-                <span className="mb-0.5">
-                  {t(`sidebar.${item.title}-Children.${childItem.title}`, {
-                    appName: drivename
-                  })}
+
+                <span>
+                  {t(`sidebar.${item.title}-Children.${childItem.title}`)}
                 </span>
               </NavLink>
             </li>
