@@ -3,33 +3,28 @@ import Parse from "parse";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { NavLink, useNavigate, useLocation } from "react-router";
-import login_img from "../assets/images/login_img.svg";
+import login_img from "../assets/images/login-medcei.png";
+import medceiLogo from "../assets/images/logo-medcei.png";
 import { useWindowSize } from "../hook/useWindowSize";
 import ModalUi from "../primitives/ModalUi";
-import {
-  emailRegex,
-} from "../constant/const";
+import { emailRegex } from "../constant/const";
 import Alert from "../primitives/Alert";
 import { appInfo } from "../constant/appinfo";
 import { fetchAppInfo } from "../redux/reducers/infoReducer";
 import { showTenant } from "../redux/reducers/ShowTenant";
-import {
-  getAppLogo,
-  saveLanguageInLocal,
-  usertimezone
-} from "../constant/Utils";
+import { saveLanguageInLocal, usertimezone } from "../constant/Utils";
 import Loader from "../primitives/Loader";
 import { useTranslation } from "react-i18next";
 import SelectLanguage from "../components/pdf/SelectLanguage";
 
 function Login() {
-  const appName =
-    "Medcei Sign™";
+  const appName = "MEDCEI";
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const { width } = useWindowSize();
+
   const [state, setState] = useState({
     email: "",
     password: "",
@@ -37,24 +32,25 @@ function Login() {
     alertMsg: "",
     passwordVisible: false,
     loading: false,
-    thirdpartyLoader: false,
+    thirdpartyLoader: false
   });
+
   const [userDetails, setUserDetails] = useState({
     Company: "",
     Destination: ""
   });
+
   const [isModal, setIsModal] = useState(false);
-  const [image, setImage] = useState();
   const [errMsg, setErrMsg] = useState();
+
   useEffect(() => {
     handleUserExist();
     // eslint-disable-next-line
   }, []);
 
   const handleUserExist = async () => {
-      checkUserExt();
+    checkUserExt();
   };
-
 
   const setLocalVar = (user) => {
     localStorage.setItem("accesstoken", user.sessionToken);
@@ -73,25 +69,18 @@ function Login() {
   };
 
   const checkUserExt = async () => {
-    const app = await getAppLogo();
-    if (app?.error === "invalid_json") {
-      setErrMsg(t("server-down", { appName: appName }));
-    } else if (
-      app?.user === "not_exist"
-    ) {
-      navigate("/addadmin");
-    }
-    if (app?.logo) {
-      setImage(app?.logo);
-    } else {
-      setImage(appInfo?.applogo || undefined);
-    }
-    dispatch(fetchAppInfo());
-    if (localStorage.getItem("accesstoken")) {
-      setState({ ...state, loading: true });
-      GetLoginData();
+    try {
+      dispatch(fetchAppInfo());
+      if (localStorage.getItem("accesstoken")) {
+        setState((prev) => ({ ...prev, loading: true }));
+        GetLoginData();
+      }
+    } catch (error) {
+      console.error("Error checking app/login state:", error);
+      setErrMsg(t("server-down", { appName }));
     }
   };
+
   const handleChange = (event) => {
     let { name, value } = event.target;
     if (name === "email") {
@@ -100,24 +89,26 @@ function Login() {
     setState({ ...state, [name]: value });
   };
 
-  const handleLogin = async (
-  ) => {
-    const email = state?.email
-    const password = state?.password
+  const handleLogin = async () => {
+    const email = state?.email;
+    const password = state?.password;
 
     if (!email || !password) {
       return;
     }
+
     localStorage.removeItem("accesstoken");
+
     try {
       setState({ ...state, loading: true });
-      localStorage.setItem("appLogo", appInfo.applogo);
+      localStorage.setItem("appLogo", medceiLogo);
+
       const _user = await Parse.Cloud.run("loginuser", { email, password });
       if (!_user) {
         setState({ ...state, loading: false });
         return;
       }
-      // Get extended user data (including 2FA status) using cloud function
+
       try {
         await Parse.User.become(_user.sessionToken);
         setLocalVar(_user);
@@ -135,6 +126,7 @@ function Login() {
       }
     }
   };
+
   const handleLoginBtn = async (event) => {
     event.preventDefault();
     if (!emailRegex.test(state.email)) {
@@ -157,13 +149,15 @@ function Login() {
         "X-Parse-Application-Id": parseAppId
       }
     });
+
     await Parse.User.become(sessionToken).then(() => {
       window.localStorage.setItem("accesstoken", sessionToken);
     });
+
     if (res.data) {
       let _user = res.data;
       setLocalVar(_user);
-      // Check extended class user role and tenentId
+
       try {
         const userSettings = appInfo.settings;
         const extUser = await Parse.Cloud.run("getUserDetails");
@@ -173,16 +167,19 @@ function Login() {
             const userRole = extUser?.get("UserRole");
             const menu =
               userRole && userSettings.find((menu) => menu.role === userRole);
+
             if (menu) {
               const _currentRole = userRole;
               const redirectUrl =
                 location?.state?.from || `/${menu.pageType}/${menu.pageId}`;
               const _role = _currentRole.replace("contracts_", "");
               const extInfo = JSON.parse(JSON.stringify(extUser));
+
               localStorage.setItem("_user_role", _role);
               localStorage.setItem("Extand_Class", JSON.stringify([extUser]));
               localStorage.setItem("userEmail", extInfo?.Email);
               localStorage.setItem("username", extInfo?.Name);
+
               if (extInfo?.TenantId) {
                 const tenant = {
                   Id: extInfo?.TenantId?.objectId || "",
@@ -192,10 +189,11 @@ function Login() {
                 dispatch(showTenant(tenant?.Name));
                 localStorage.setItem("TenantName", tenant?.Name);
               }
+
               localStorage.setItem("PageLanding", menu.pageId);
               localStorage.setItem("defaultmenuid", menu.menuId);
               localStorage.setItem("pageType", menu.pageType);
-                navigate(redirectUrl);
+              navigate(redirectUrl);
             } else {
               showToast("danger", t("role-not-found"));
               logOutUser();
@@ -209,8 +207,8 @@ function Login() {
           logOutUser();
         }
       } catch (error) {
-        console.error("err in fetching extUser", err);
-        showToast("danger", `${err.message}`);
+        console.error("err in fetching extUser", error);
+        showToast("danger", `${error.message}`);
         const payload = { sessionToken: _user.sessionToken };
         handleSubmitbtn(payload);
       } finally {
@@ -225,8 +223,10 @@ function Login() {
       const user = await Parse.User.become(localStorage.getItem("accesstoken"));
       const _user = user.toJSON();
       setLocalVar(_user);
+
       const userSettings = appInfo.settings;
       const extUser = await Parse.Cloud.run("getUserDetails");
+
       if (extUser) {
         const IsDisabled = extUser?.get("IsDisabled") || false;
         if (!IsDisabled) {
@@ -234,6 +234,7 @@ function Login() {
           const _currentRole = userRole;
           const menu =
             userRole && userSettings.find((menu) => menu.role === userRole);
+
           if (menu) {
             const extInfo = JSON.parse(JSON.stringify(extUser));
             const _role = _currentRole.replace("contracts_", "");
@@ -243,6 +244,7 @@ function Login() {
             localStorage.setItem("Extand_Class", JSON.stringify([extUser]));
             localStorage.setItem("userEmail", extInfo.Email);
             localStorage.setItem("username", extInfo.Name);
+
             if (extInfo?.TenantId) {
               const tenant = {
                 Id: extInfo?.TenantId?.objectId || "",
@@ -252,10 +254,11 @@ function Login() {
               dispatch(showTenant(tenant?.Name));
               localStorage.setItem("TenantName", tenant?.Name);
             }
+
             localStorage.setItem("PageLanding", menu.pageId);
             localStorage.setItem("defaultmenuid", menu.menuId);
             localStorage.setItem("pageType", menu.pageType);
-              navigate(redirectUrl);
+            navigate(redirectUrl);
           } else {
             setState({ ...state, loading: false });
             logOutUser();
@@ -286,6 +289,7 @@ function Login() {
       const userInformation = JSON.parse(
         localStorage.getItem("UserInformation")
       );
+
       if (payload && payload.sessionToken) {
         const params = {
           userDetails: {
@@ -330,6 +334,7 @@ function Login() {
     } catch (err) {
       console.log("Err while logging out", err);
     }
+
     let appdata = localStorage.getItem("userSettings");
     let applogo = localStorage.getItem("appLogo");
     let defaultmenuid = localStorage.getItem("defaultmenuid");
@@ -341,13 +346,13 @@ function Login() {
     localStorage.clear();
     saveLanguageInLocal(i18n);
 
-    localStorage.setItem("appLogo", applogo);
-    localStorage.setItem("defaultmenuid", defaultmenuid);
-    localStorage.setItem("PageLanding", PageLanding);
-    localStorage.setItem("userSettings", appdata);
-    localStorage.setItem("baseUrl", baseUrl);
-    localStorage.setItem("parseAppId", appid);
-    localStorage.setItem("favicon", favicon);
+    localStorage.setItem("appLogo", applogo || medceiLogo);
+    localStorage.setItem("defaultmenuid", defaultmenuid || "");
+    localStorage.setItem("PageLanding", PageLanding || "");
+    localStorage.setItem("userSettings", appdata || "");
+    localStorage.setItem("baseUrl", baseUrl || "");
+    localStorage.setItem("parseAppId", appid || "");
+    localStorage.setItem("favicon", favicon || "");
   };
 
   const continueLoginFlow = async () => {
@@ -360,21 +365,24 @@ function Login() {
           const userRole = extUser?.get("UserRole");
           const menu =
             userRole && userSettings?.find((menu) => menu.role === userRole);
+
           if (menu) {
             const _currentRole = userRole;
             const redirectUrl =
               location?.state?.from || `/${menu.pageType}/${menu.pageId}`;
             const _role = _currentRole.replace("contracts_", "");
             localStorage.setItem("_user_role", _role);
+
             const checkLanguage = extUser?.get("Language");
             if (checkLanguage) {
               checkLanguage && i18n.changeLanguage(checkLanguage);
             }
+
             const extInfo = JSON.parse(JSON.stringify(extUser));
-            // Continue with storing user data and redirecting
             localStorage.setItem("Extand_Class", JSON.stringify([extUser]));
             localStorage.setItem("userEmail", extInfo.Email);
             localStorage.setItem("username", extInfo.Name);
+
             if (extInfo?.TenantId) {
               const tenant = {
                 Id: extInfo?.TenantId?.objectId || "",
@@ -384,11 +392,12 @@ function Login() {
               dispatch(showTenant(tenant?.Name));
               localStorage.setItem("TenantName", tenant?.Name);
             }
+
             localStorage.setItem("PageLanding", menu.pageId);
             localStorage.setItem("defaultmenuid", menu.menuId);
             localStorage.setItem("pageType", menu.pageType);
-              setState({ ...state, loading: false });
-              navigate(redirectUrl);
+            setState({ ...state, loading: false });
+            navigate(redirectUrl);
           } else {
             setState({ ...state, loading: false });
             setIsModal(true);
@@ -398,8 +407,8 @@ function Login() {
           logOutUser();
         }
       } else {
-          showToast("danger", t("user-not-found"));
-          logOutUser();
+        showToast("danger", t("user-not-found"));
+        logOutUser();
       }
     } catch (error) {
       console.error("Error during login flow", error);
@@ -421,6 +430,7 @@ function Login() {
           <Loader />
         </div>
       )}
+
       {appInfo && appInfo.appId ? (
         <>
           <div
@@ -430,26 +440,28 @@ function Login() {
           >
             <div className="md:p-4 lg:p-10 p-4 bg-base-100 text-base-content op-card">
               <div className="w-[250px] h-[66px] inline-block overflow-hidden">
-                {image && (
-                  <img
-                    src={image}
-                    className="object-contain h-full"
-                    alt="applogo"
-                  />
-                )}
+                <img
+                  src={medceiLogo}
+                  className="object-contain h-full"
+                  alt="MEDCEI"
+                />
               </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2">
                 <div>
                   <form onSubmit={handleLoginBtn} aria-label="Login Form">
                     <h1 className="text-[30px] mt-6">{t("welcome")}</h1>
+
                     <fieldset>
                       <legend className="text-[12px] text-[#878787]">
                         {t("Login-to-your-account")}
                       </legend>
+
                       <div className="w-full px-6 py-3 my-1 op-card bg-base-100 shadow-md outline outline-1 outline-slate-300/50">
                         <label className="block text-xs" htmlFor="email">
                           {t("email")}
                         </label>
+
                         <input
                           id="email"
                           type="email"
@@ -464,50 +476,52 @@ function Login() {
                           }
                           onInput={(e) => e.target.setCustomValidity("")}
                         />
+
                         <hr className="my-1 border-none" />
-                            <label className="block text-xs" htmlFor="password">
-                              {t("password")}
-                            </label>
-                            <div className="relative">
-                              <input
-                                id="password"
-                                type={
-                                  state.passwordVisible ? "text" : "password"
-                                }
-                                className="op-input op-input-bordered op-input-sm focus:outline-none hover:border-base-content w-full text-xs"
-                                name="password"
-                                value={state.password}
-                                autoComplete="current-password"
-                                onChange={handleChange}
-                                onInvalid={(e) =>
-                                  e.target.setCustomValidity(
-                                    t("input-required")
-                                  )
-                                }
-                                onInput={(e) => e.target.setCustomValidity("")}
-                                required
-                              />
-                              <span
-                                className="absolute cursor-pointer top-[50%] right-[10px] -translate-y-[50%] text-base-content"
-                                onClick={togglePasswordVisibility}
-                              >
-                                {state.passwordVisible ? (
-                                  <i className="fa-light fa-eye-slash text-xs pb-1" /> // Close eye icon
-                                ) : (
-                                  <i className="fa-light fa-eye text-xs pb-1 " /> // Open eye icon
-                                )}
-                              </span>
-                            </div>
-                          <div className="relative mt-1">
-                            <NavLink
-                              to="/forgetpassword"
-                              className="text-[13px] op-link op-link-primary underline-offset-1 focus:outline-none ml-1"
-                            >
-                              {t("forgot-password")}?
-                            </NavLink>
-                          </div>
+
+                        <label className="block text-xs" htmlFor="password">
+                          {t("password")}
+                        </label>
+
+                        <div className="relative">
+                          <input
+                            id="password"
+                            type={state.passwordVisible ? "text" : "password"}
+                            className="op-input op-input-bordered op-input-sm focus:outline-none hover:border-base-content w-full text-xs"
+                            name="password"
+                            value={state.password}
+                            autoComplete="current-password"
+                            onChange={handleChange}
+                            onInvalid={(e) =>
+                              e.target.setCustomValidity(t("input-required"))
+                            }
+                            onInput={(e) => e.target.setCustomValidity("")}
+                            required
+                          />
+
+                          <span
+                            className="absolute cursor-pointer top-[50%] right-[10px] -translate-y-[50%] text-base-content"
+                            onClick={togglePasswordVisibility}
+                          >
+                            {state.passwordVisible ? (
+                              <i className="fa-light fa-eye-slash text-xs pb-1" />
+                            ) : (
+                              <i className="fa-light fa-eye text-xs pb-1" />
+                            )}
+                          </span>
+                        </div>
+
+                        <div className="relative mt-1">
+                          <NavLink
+                            to="/forgetpassword"
+                            className="text-[13px] op-link op-link-primary underline-offset-1 focus:outline-none ml-1"
+                          >
+                            {t("forgot-password")}?
+                          </NavLink>
+                        </div>
                       </div>
                     </fieldset>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-center text-xs font-bold mt-2">
                       <button
                         type="submit"
@@ -519,12 +533,13 @@ function Login() {
                     </div>
                   </form>
                 </div>
+
                 {width >= 768 && (
                   <div className="place-self-center">
                     <div className="mx-auto md:w-[300px] lg:w-[400px] xl:w-[500px]">
                       <img
                         src={login_img}
-                        alt="The image illustrates a person from behind, seated at a desk with a four-monitor computer setup, in an environment with a light blue and white color scheme, featuring a potted plant to the right."
+                        alt="Ilustração de acesso à plataforma MEDCEI"
                         width="100%"
                       />
                     </div>
@@ -532,11 +547,14 @@ function Login() {
                 )}
               </div>
             </div>
+
             <SelectLanguage />
+
             {state.alertMsg && (
               <Alert type={state.alertType}>{state.alertMsg}</Alert>
             )}
           </div>
+
           <ModalUi
             isOpen={isModal}
             title={t("additional-info")}
@@ -570,6 +588,7 @@ function Login() {
                   required
                 />
               </div>
+
               <div className="mb-3">
                 <label
                   htmlFor="JobTitle"
@@ -597,6 +616,7 @@ function Login() {
                   required
                 />
               </div>
+
               <div className="mt-4 gap-2 flex flex-row">
                 <button
                   type="button"
@@ -627,4 +647,5 @@ function Login() {
     </>
   );
 }
+
 export default Login;
