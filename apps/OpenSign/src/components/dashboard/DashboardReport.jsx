@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import Parse from "parse";
 import DocumentsReport from "../../reports/document/DocumentsReport";
 import reportJson from "../../json/ReportJson";
@@ -6,6 +6,7 @@ import axios from "axios";
 import Loader from "../../primitives/Loader";
 import { useTranslation } from "react-i18next";
 import { withSessionValidation } from "../../utils";
+
 function DashboardReport(props) {
   const { t } = useTranslation();
   const [List, setList] = useState([]);
@@ -15,7 +16,7 @@ function DashboardReport(props) {
   const [heading, setHeading] = useState([]);
   const [isNextRecord, setIsNextRecord] = useState(false);
   const [isMoreDocs, setIsMoreDocs] = useState(true);
-  const abortController = new AbortController();
+  const abortController = useMemo(() => new AbortController(), []);
   const docPerPage = 5;
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -26,20 +27,20 @@ function DashboardReport(props) {
     setReportName("");
     setSearchTerm("");
     setMobileSearchOpen(false);
+    setList([]);
+    setIsMoreDocs(true);
+    setIsNextRecord(false);
     getReportData(props.Record.reportId, 0, 20, "");
 
-    // Function returned from useEffect is called on unmount
     return () => {
       setIsLoader(true);
       setList([]);
       setIsNextRecord(false);
-      // Here it'll abort the fetch
       abortController.abort();
     };
     // eslint-disable-next-line
   }, [props.Record.reportId]);
 
-  // below useEffect call when isNextRecord state is true and fetch next record
   useEffect(() => {
     if (isNextRecord) {
       getReportData(props.Record.reportId, List.length, 20, searchTerm);
@@ -50,9 +51,11 @@ function DashboardReport(props) {
   const handleSearchChange = withSessionValidation(async (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
+
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current);
     }
+
     debounceTimer.current = setTimeout(async () => {
       try {
         const headers = {
@@ -60,6 +63,7 @@ function DashboardReport(props) {
           "X-Parse-Application-Id": localStorage.getItem("parseAppId"),
           sessiontoken: localStorage.getItem("accesstoken")
         };
+
         const url = `${localStorage.getItem("baseUrl")}functions/getReport`;
         const res = await axios.post(
           url,
@@ -71,6 +75,7 @@ function DashboardReport(props) {
           },
           { headers }
         );
+
         const data = res.data?.result || [];
         if (!data.error) {
           setList(data);
@@ -82,6 +87,7 @@ function DashboardReport(props) {
         console.error("Search error:", err);
       }
     }, 300);
+
     setIsSearchResult(false);
   });
 
@@ -103,10 +109,12 @@ function DashboardReport(props) {
     async (id, skipUserRecord = 0, limit = 20, term = searchTerm) => {
       setIsLoader(true);
       const json = reportJson(id);
+
       if (json) {
         setActions(json.actions);
         setReportName(json.reportName);
         setHeading(json.heading);
+
         const currentUser = Parse.User.current().id;
 
         const headers = {
@@ -114,27 +122,33 @@ function DashboardReport(props) {
           "X-Parse-Application-Id": localStorage.getItem("parseAppId"),
           sessiontoken: localStorage.getItem("accesstoken")
         };
+
         try {
           const skipRecord = id === "5Go51Q7T8r" ? 0 : skipUserRecord;
           const limitRecord = id === "5Go51Q7T8r" ? 200 : limit;
           const params = { reportId: id, skip: skipRecord, limit: limitRecord };
+
           if (term) {
             params.searchTerm = term;
           }
+
           const url = `${localStorage.getItem("baseUrl")}functions/getReport`;
           const res = await axios.post(url, params, {
             headers: headers,
-            signal: abortController.signal // is used to cancel fetch query
+            signal: abortController.signal
           });
+
           if (id === "5Go51Q7T8r") {
             const listData = res.data?.result.filter(
               (x) => x.Signers.length > 0
             );
+
             let arr = [];
             for (const obj of listData) {
               const isSigner = obj.Signers?.some(
                 (item) => item.UserId.objectId === currentUser
               );
+
               if (isSigner) {
                 let isRecord;
                 if (obj?.AuditTrail && obj?.AuditTrail.length > 0) {
@@ -146,16 +160,19 @@ function DashboardReport(props) {
                 } else {
                   isRecord = false;
                 }
+
                 if (isRecord === false) {
                   arr.push(obj);
                 }
               }
             }
+
             if (arr.length === docPerPage) {
               setIsMoreDocs(true);
             } else {
               setIsMoreDocs(false);
             }
+
             setList((prevRecord) =>
               prevRecord.length > 0 ? [...prevRecord, ...arr] : arr
             );
@@ -165,7 +182,9 @@ function DashboardReport(props) {
             } else {
               setIsMoreDocs(false);
             }
+
             setIsNextRecord(false);
+
             if (!res.data.result.error) {
               setList((prevRecord) =>
                 prevRecord.length > 0
@@ -174,12 +193,12 @@ function DashboardReport(props) {
               );
             }
           }
+
           setIsLoader(false);
         } catch (err) {
           const isCancel = axios.isCancel(err);
           if (!isCancel) {
             console.log("err ", err);
-            setIsLoader(false);
           }
           setIsLoader(false);
         }
@@ -188,10 +207,11 @@ function DashboardReport(props) {
       }
     }
   );
+
   return (
     <>
       {isLoader ? (
-        <div className="h-[250px] flex justify-center items-center">
+        <div className="h-[250px] flex justify-center items-center bg-white rounded-2xl border border-gray-100 shadow-sm">
           <Loader />
         </div>
       ) : (
@@ -214,9 +234,14 @@ function DashboardReport(props) {
               isSearchResult={isSearchResult}
             />
           ) : (
-            <div className="flex items-center justify-center h-[100px] w-full bg-white rounded-box">
-              <div className="text-center text-xl text-base-content">
-                {t("report-not-found")}
+            <div className="flex items-center justify-center h-[140px] w-full bg-white rounded-2xl border border-gray-100 shadow-sm">
+              <div className="text-center">
+                <div className="text-lg font-semibold text-[#166B50]">
+                  {t("report-not-found")}
+                </div>
+                <div className="text-sm text-gray-500 mt-1">
+                  Não foi possível carregar este painel.
+                </div>
               </div>
             </div>
           )}
