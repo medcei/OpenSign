@@ -3,7 +3,7 @@ import Parse from "parse";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { NavLink, useNavigate, useLocation } from "react-router";
-import login_img from "../assets/images/login-medcei.png";
+import login_img from "../assets/images/login_img.svg";
 import medceiLogo from "../assets/images/logo-medcei.png";
 import { useWindowSize } from "../hook/useWindowSize";
 import ModalUi from "../primitives/ModalUi";
@@ -64,8 +64,16 @@ function Login() {
   };
 
   const showToast = (type, msg) => {
-    setState({ ...state, loading: false, alertType: type, alertMsg: msg });
-    setTimeout(() => setState({ ...state, alertMsg: "" }), 2000);
+    setState((prev) => ({
+      ...prev,
+      loading: false,
+      alertType: type,
+      alertMsg: msg
+    }));
+    setTimeout(
+      () => setState((prev) => ({ ...prev, alertMsg: "" })),
+      2000
+    );
   };
 
   const checkUserExt = async () => {
@@ -86,7 +94,7 @@ function Login() {
     if (name === "email") {
       value = value?.toLowerCase()?.replace(/\s/g, "");
     }
-    setState({ ...state, [name]: value });
+    setState((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleLogin = async () => {
@@ -100,12 +108,12 @@ function Login() {
     localStorage.removeItem("accesstoken");
 
     try {
-      setState({ ...state, loading: true });
+      setState((prev) => ({ ...prev, loading: true }));
       localStorage.setItem("appLogo", medceiLogo);
 
       const _user = await Parse.Cloud.run("loginuser", { email, password });
       if (!_user) {
-        setState({ ...state, loading: false });
+        setState((prev) => ({ ...prev, loading: false }));
         return;
       }
 
@@ -137,7 +145,7 @@ function Login() {
   };
 
   const setThirdpartyLoader = (value) => {
-    setState({ ...state, thirdpartyLoader: value });
+    setState((prev) => ({ ...prev, thirdpartyLoader: value }));
   };
 
   const thirdpartyLoginfn = async (sessionToken) => {
@@ -161,6 +169,7 @@ function Login() {
       try {
         const userSettings = appInfo.settings;
         const extUser = await Parse.Cloud.run("getUserDetails");
+
         if (extUser) {
           const IsDisabled = extUser?.get("IsDisabled") || false;
           if (!IsDisabled) {
@@ -218,7 +227,7 @@ function Login() {
   };
 
   const GetLoginData = async () => {
-    setState({ ...state, loading: true });
+    setState((prev) => ({ ...prev, loading: true }));
     try {
       const user = await Parse.User.become(localStorage.getItem("accesstoken"));
       const _user = user.toJSON();
@@ -260,7 +269,7 @@ function Login() {
             localStorage.setItem("pageType", menu.pageType);
             navigate(redirectUrl);
           } else {
-            setState({ ...state, loading: false });
+            setState((prev) => ({ ...prev, loading: false }));
             logOutUser();
           }
         } else {
@@ -278,7 +287,10 @@ function Login() {
   };
 
   const togglePasswordVisibility = () => {
-    setState({ ...state, passwordVisible: !state.passwordVisible });
+    setState((prev) => ({
+      ...prev,
+      passwordVisible: !prev.passwordVisible
+    }));
   };
 
   const handleSubmitbtn = async (e) => {
@@ -359,6 +371,7 @@ function Login() {
     try {
       const userSettings = appInfo.settings;
       const extUser = await Parse.Cloud.run("getUserDetails");
+
       if (extUser) {
         const IsDisabled = extUser?.get("IsDisabled") || false;
         if (!IsDisabled) {
@@ -375,7 +388,7 @@ function Login() {
 
             const checkLanguage = extUser?.get("Language");
             if (checkLanguage) {
-              checkLanguage && i18n.changeLanguage(checkLanguage);
+              i18n.changeLanguage(checkLanguage);
             }
 
             const extInfo = JSON.parse(JSON.stringify(extUser));
@@ -396,10 +409,10 @@ function Login() {
             localStorage.setItem("PageLanding", menu.pageId);
             localStorage.setItem("defaultmenuid", menu.menuId);
             localStorage.setItem("pageType", menu.pageType);
-            setState({ ...state, loading: false });
+            setState((prev) => ({ ...prev, loading: false }));
             navigate(redirectUrl);
           } else {
-            setState({ ...state, loading: false });
+            setState((prev) => ({ ...prev, loading: false }));
             setIsModal(true);
           }
         } else {
@@ -498,7 +511,6 @@ function Login() {
                             onInput={(e) => e.target.setCustomValidity("")}
                             required
                           />
-
                           <span
                             className="absolute cursor-pointer top-[50%] right-[10px] -translate-y-[50%] text-base-content"
                             onClick={togglePasswordVisibility}
