@@ -17,8 +17,10 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.sidebar.isOpen);
+
   const [menuList, setmenuList] = useState([]);
-  const [submenuOpen, setSubmenuOpen] = useState(false);
+  const [submenuOpen, setSubmenuOpen] = useState({});
+
   const username = localStorage.getItem("username");
   const image = localStorage.getItem("profileImg") || dp;
   const tenantname = localStorage.getItem("Extand_Class")
@@ -46,14 +48,21 @@ const Sidebar = () => {
         const userRole = extClass?.[0]?.UserRole || "contracts_User";
         const isAdmin =
           userRole === "contracts_Admin" || userRole === "contracts_OrgAdmin";
+
         const newSidebarList = sidebarList.map((item) => {
           if (item.title !== "Settings") return item;
+
           const newItem = { ...item };
-          const baseChildren = isAdmin ? subSetting : subSetting?.slice(0, 1);
-            const mysignature = newItem.children.slice(0, 1);
-            newItem.children = [...mysignature, ...baseChildren];
+          const baseChildren = isAdmin
+            ? subSetting
+            : subSetting?.slice(0, 1);
+
+          const mysignature = newItem.children.slice(0, 1);
+          newItem.children = [...mysignature, ...baseChildren];
+
           return newItem;
         });
+
         setmenuList(newSidebarList);
       }
     } catch (e) {
@@ -71,52 +80,50 @@ const Sidebar = () => {
     closeSidebar();
     setSubmenuOpen({});
   };
+
   const handleProfile = () => {
     closeSidebar();
     navigate("/profile");
   };
+
   return (
     <aside
-      className={`absolute max-lg:min-h-screen lg:relative bg-base-100 overflow-y-auto transition-all z-[500] shadow-lg hide-scrollbar
-     ${isOpen ? "w-full md:w-64" : "w-0"}`}
+      className={`absolute max-lg:min-h-screen lg:relative bg-[#166B50] text-white overflow-y-auto transition-all z-[500] shadow-lg hide-scrollbar border-r border-[#0F4F3C]
+      ${isOpen ? "w-full md:w-64" : "w-0"}`}
     >
-      <div className="flex px-2 py-3 gap-2 items-center shadow-md">
+      <div className="flex px-3 py-4 gap-3 items-center border-b border-[#0F4F3C] bg-[#1D8F6A]">
         <div
-          onClick={() => handleProfile()}
-          className="w-[75px] h-[75px] rounded-full ring-[2px] ring-offset-2 ring-gray-400 overflow-hidden cursor-pointer"
+          onClick={handleProfile}
+          className="w-[65px] h-[65px] rounded-full ring-[2px] ring-offset-2 ring-white/40 overflow-hidden cursor-pointer"
         >
           <img
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain bg-white"
             src={image}
             alt="Profile"
           />
         </div>
+
         <div>
           <p
             onClick={handleProfile}
-            className="text-[14px] font-bold text-base-content cursor-pointer"
+            className="text-[14px] font-semibold text-white cursor-pointer"
           >
             {username}
           </p>
+
           <p
             onClick={handleProfile}
-            className={`cursor-pointer text-[12px] text-base-content ${
-              tenantname ? "mt-2" : ""
+            className={`cursor-pointer text-[12px] text-[#DDF3EC] ${
+              tenantname ? "mt-1" : ""
             }`}
           >
             {tenantname}
           </p>
         </div>
       </div>
-      <nav
-        className="op-menu op-menu-sm"
-        aria-label="OpenSign Sidebar Navigation"
-      >
-        <ul
-          className="text-sm"
-          role="menubar"
-          aria-label="OpenSign Sidebar Navigation"
-        >
+
+      <nav className="op-menu op-menu-sm mt-2" aria-label="Medcei Sidebar Navigation">
+        <ul className="text-sm" role="menubar">
           {menuList.map((item) =>
             !item.children ? (
               <Menu
@@ -137,9 +144,10 @@ const Sidebar = () => {
           )}
         </ul>
       </nav>
-        <footer className="my-3 flex justify-center items-center text-[25px] text-base-content gap-3">
-          <SocialMedia />
-        </footer>
+
+      <footer className="my-4 flex justify-center items-center text-[22px] text-[#DDF3EC] gap-4">
+        <SocialMedia />
+      </footer>
     </aside>
   );
 };
