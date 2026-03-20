@@ -25,8 +25,10 @@ const DashboardCard = (props) => {
           "X-Parse-Application-Id": parseAppId,
           sessionToken: localStorage.getItem("accesstoken")
         };
+
         let body = {};
         let res;
+
         if (localStorage.getItem("Extand_Class")) {
           let data = JSON.parse(localStorage.getItem("Extand_Class"));
           res = data[0];
@@ -34,6 +36,7 @@ const DashboardCard = (props) => {
           res = await Parse.Cloud.run("getUserDetails");
           if (res) res = res.toJSON();
         }
+
         if (res) {
           let json = res;
           var reg = /(\#.*?\#)/gi; // eslint-disable-line
@@ -50,6 +53,7 @@ const DashboardCard = (props) => {
           } else {
             test = str.replace(reg, json.objectId);
           }
+
           if (str.replace(reg, json.objectId)) {
             body = test;
           } else {
@@ -58,6 +62,7 @@ const DashboardCard = (props) => {
         } else {
           body = props.Data.query;
         }
+
         await axios.post(url, body, { headers: headers }).then((res) => {
           if (res) {
             if (res.data.result.length > 0) {
@@ -82,6 +87,7 @@ const DashboardCard = (props) => {
         let _query = props.Data.query;
         let str = _query;
         var test1;
+
         str = str.split("#$").join("$");
         str = str.split("#*").join("$");
         str = str.split("_DOT_").join(".");
@@ -99,13 +105,14 @@ const DashboardCard = (props) => {
           let json = resr;
           let output = str.match(reg1);
           const HashCount = str.match(reg1);
+
           if (HashCount.length > 1) {
-            // `getReplacedHashQuery` is used to replace multiple hash keyword with actual values from query
             test1 = getReplacedHashQuery(str, json);
           } else {
             output = output.join();
             output = output.substring(1, output.length - 1);
             output = output.split(".");
+
             if (output.length > 1) {
               test1 = str.replace(reg1, json[output[0]][output[1]]);
             } else if (json[output[0]]) {
@@ -121,20 +128,23 @@ const DashboardCard = (props) => {
         } else {
           test1 = str.replace(reg1, currentUser.id);
         }
+
         let url = `${parseBaseUrl}classes/${props.Data.class}?${test1}`;
         const headers = {
           "Content-Type": "application/json",
           "X-Parse-Application-Id": parseAppId,
           "X-Parse-Session-Token": localStorage.getItem("accesstoken")
         };
-        // handle need your sign report count
+
         if (props.Data.Redirect_id === "4Hhwbp482K") {
           const params = {
             reportId: props.Data.Redirect_id,
             skip: 0,
             limit: 200
           };
+
           const url = `${parseBaseUrl}functions/getReport`;
+
           await axios
             .post(url, params, {
               headers: {
@@ -147,11 +157,13 @@ const DashboardCard = (props) => {
               const listData = res.data?.result?.filter(
                 (x) => x.Signers.length > 0
               );
+
               let arr = [];
               for (const obj of listData) {
                 const isSigner = obj.Signers?.some(
                   (item) => item.UserId.objectId === currentUser.id
                 );
+
                 if (isSigner) {
                   let isRecord;
                   if (obj?.AuditTrail && obj?.AuditTrail.length > 0) {
@@ -163,6 +175,7 @@ const DashboardCard = (props) => {
                   } else {
                     isRecord = false;
                   }
+
                   if (isRecord === false) {
                     arr.push(obj);
                   }
@@ -204,6 +217,7 @@ const DashboardCard = (props) => {
         var str = props.FilterData.query;
         let restr = JSON.stringify(props.FilterData.query);
         var reg = /(\#.*?\#)/gi; // eslint-disable-line
+
         restr = restr.split("#$").join("$");
         restr = restr.split("#*").join("$");
         restr = restr.split("_DOT_").join(".");
@@ -216,11 +230,12 @@ const DashboardCard = (props) => {
               res = data[0];
             } else {
               let resr = await Parse.Cloud.run("getUserDetails");
-              if (res) res = resr.toJSON();
+              if (resr) res = resr.toJSON();
             }
 
             let json = res;
             let output = restr.match(reg);
+
             if (output.length === 1) {
               output = output.filter((x) => x === "#filterCondition#");
               if (output.length === 1) {
@@ -249,6 +264,7 @@ const DashboardCard = (props) => {
                 }
               }
             }
+
             body = str;
             const response = await axios.post(url, body, { headers: headers });
             if (response.data.result.length > 0) {
@@ -299,6 +315,7 @@ const DashboardCard = (props) => {
     if (props.Data && props.Data.Redirect_type) {
       const Redirect_type = props.Data.Redirect_type;
       const id = props.Data.Redirect_id;
+
       if (Redirect_type === "Form") {
         navigate(`/form/${id}`);
       } else if (Redirect_type === "Report") {
@@ -311,39 +328,49 @@ const DashboardCard = (props) => {
     }
   }
 
+  const isClickable = props.Data && props.Data.Redirect_type;
+
   return (
     <div
       onClick={() => openReport()}
-      className={`${
-        props.Data && props.Data.Redirect_type
-          ? "cursor-pointer"
+      className={`relative h-full ${
+        isClickable
+          ? "cursor-pointer transition-transform duration-200 hover:scale-[1.01]"
           : "cursor-default"
       }`}
     >
-      <div className="flex items-center justify-start gap-5 text-white">
-        <span className="rounded-full bg-base-300 bg-opacity-20 w-[60px] h-[60px] self-start flex justify-center items-center">
-          <i
-            className={`${
-              props.Icon ? props.Icon : "fa-light fa-info"
-            } text-[25px] lg:text-[30px]`}
-          ></i>
-        </span>
+      <div className="flex items-start justify-between gap-4 text-white relative z-10">
+        <div className="flex items-center justify-start gap-5">
+          <span className="rounded-full bg-white/15 border border-white/10 w-[72px] h-[72px] self-start flex justify-center items-center shadow-inner backdrop-blur-sm">
+            <i
+              className={`${
+                props.Icon ? props.Icon : "fa-light fa-info"
+              } text-[28px] lg:text-[34px] text-white`}
+            ></i>
+          </span>
 
-        <div className="font-medium">
-          <div className="text-base lg:text-lg">
-            {t(`dashboard-card.${props.Label}`)}
-          </div>
-          <div className="text-2xl font-light">
-            {loading ? <div className="loader-01"></div> : setFormat(response)}
+          <div className="font-medium">
+            <div className="text-lg lg:text-[30px] font-semibold leading-tight tracking-tight">
+              {t(`dashboard-card.${props.Label}`)}
+            </div>
+
+            <div className="mt-2 text-[34px] lg:text-[42px] font-light leading-none">
+              {loading ? (
+                <div className="loader-01"></div>
+              ) : (
+                setFormat(response)
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="text-xs absolute top-3 right-2">
-        <Tooltip
-          id={props.Label}
-          iconColor={"white"}
-          message={t(`tour-mssg.${props.Label}`)}
-        />
+
+        <div className="text-xs absolute top-0 right-0">
+          <Tooltip
+            id={props.Label}
+            iconColor={"white"}
+            message={t(`tour-mssg.${props.Label}`)}
+          />
+        </div>
       </div>
     </div>
   );
