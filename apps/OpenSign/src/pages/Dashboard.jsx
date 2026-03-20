@@ -12,6 +12,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
+
   const [dashboard, setdashboard] = useState({});
   const [loading, setloading] = useState(true);
 
@@ -32,21 +33,30 @@ const Dashboard = () => {
     try {
       const dashboard = dashboardJson.find((x) => x.id === id);
       setdashboard(dashboard);
+
       const dashboardTour = dashboard.columns
         .filter((col) => {
           if (col.widget.data && col.widget.data.tourSection) {
             return col;
           }
+          return false;
         })
         .map((col) => {
           return {
             selector: `[data-tut=${col.widget.data.tourSection}]`,
             content: t(`tour-mssg.${col.widget.label}`),
             position: "top",
-            styles: { fontSize: "13px" }
-            // style: { backgroundColor: "#abd4d2" },
+            styles: {
+              fontSize: "13px",
+              backgroundColor: "#DDF3EC",
+              color: "#0F4F3C",
+              borderRadius: "10px",
+              padding: "10px",
+              boxShadow: "0 4px 12px rgba(15, 79, 60, 0.15)"
+            }
           };
         });
+
       dispatch(saveTourSteps(dashboardTour));
       setloading(false);
     } catch (e) {
@@ -58,7 +68,7 @@ const Dashboard = () => {
   return (
     <React.Fragment>
       {loading ? (
-        <div className="h-[300px] w-full bg-white flex justify-center items-center rounded-md">
+        <div className="h-[300px] w-full bg-[#DDF3EC] border border-[#B7E4D7] flex justify-center items-center rounded-md shadow-sm text-[#0F4F3C]">
           <Loader />
         </div>
       ) : (
