@@ -46,7 +46,7 @@
   "contact-now": "Contactar agora",
   "upgrade-to": "Atualizar para",
   "plan": "Plano",
-  "connect": Ligar",
+  "connect": "Ligar",
   "connect-to-g-drive": "Ligar ao Google Drive",
   "reconnect-to-g-drive": "Voltar a ligar ao Google Drive",
   "gdrive-info-connect": "Quando o Google Drive estiver ligado, o documento concluído será guardado na pasta MedceiSign no Google Drive.",
@@ -642,9 +642,7 @@
     "linked-in": "LinkedIn",
     "twitter": "Twitter",
     "discord": "Discord"
-  }
-}
-{
+  },
   "tour-mssg": {
     "home-layout-1": "Iniciou sessão com sucesso! Vamos dar uma vista de olhos.",
     "home-layout-2": "Para carregar documentos para assinatura própria ou solicitar assinaturas a outros, basta selecionar os respetivos botões.",
@@ -719,7 +717,6 @@
   "bulk-send-subscription-alert": "Atualize para plano Profissional ou Equipa para usar envio em massa.",
   "generate-test-token": "Gerar token de teste",
   "regenerate-test-token": "Regenerar token de teste",
-  "reason": "Motivo",
   "decline-by": "Recusado/revogado por",
   "document-declined": "Documento recusado",
   "here": "aqui",
@@ -793,7 +790,6 @@
   "logo": "Logótipo",
   "favicon": "Favicon",
   "update": "Atualizar",
-  "processing": "A processar...",
   "save-and-activate": "Guardar e ativar",
   "email-settings": "Definições de email",
   "delete-account": "Eliminar conta",
