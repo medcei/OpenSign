@@ -5,19 +5,20 @@ import { useManifestUrl } from "../hook/useManifestUrl";
 
 const TITLE_MAP = {
   "/": "login",
-  // Homelayout
-  "/dashboard/35KBoSgoAK": "Dashboard",
+
+  // Home layout
+  "/dashboard/35KBoSgoAK": "sidebar.Dashboard",
   "/form/sHAnZphf69": "Sign Yourself",
   "/form/8mZzFxbG1z": "Request Signatures",
   "/form/template": "New Template",
-  "/report/6TeaPr321t": "Templates",
+  "/report/6TeaPr321t": "sidebar.Templates",
   "/report/4Hhwbp482K": "Need your sign",
   "/report/1MwEuxLEkF": "In Progress",
   "/report/kQUoW4hUXz": "Completed",
   "/report/ByHuevtCFY": "Drafts",
   "/report/UPr2Fm5WY3": "Declined",
   "/report/zNqBHXHsYH": "Expired",
-  "/report/contacts": "Contactbook",
+  "/report/contacts": "sidebar.Contactbook",
   "/drive": "Drive",
   "/managesign": "My Signature",
   "/preferences": "Preferences",
@@ -33,20 +34,19 @@ const TITLE_MAP = {
   "/recipientSignPdf/:docId/:contactBookId": "Request Signatures",
   "/load/recipientSignPdf/:docId/:contactBookId": "Request Signatures",
 
-  // alone
+  // Standalone
   "/debugpdf": "Debug Pdf",
   "/forgetpassword": "forgot-password",
   "/success": "success",
   "/addadmin": "add-admin",
   "/upgrade-2.1": "add-admin",
   "/draftDocument": "New Document",
-  "/login/:base64url": "Request Signatures",
-
+  "/login/:base64url": "Request Signatures"
 };
 
 function resolveTitle(pathname, override) {
   if (override) return override;
-  for (let [pattern, label] of Object.entries(TITLE_MAP)) {
+  for (const [pattern, label] of Object.entries(TITLE_MAP)) {
     if (matchPath({ path: pattern, end: true }, pathname)) {
       return label;
     }
@@ -57,17 +57,18 @@ function resolveTitle(pathname, override) {
 export default function Title() {
   const { pathname, state } = useLocation();
   const { t } = useTranslation();
-  const appName =
-    "OpenSign™";
+  const appName = "MedceiSign";
   const logo = useMemo(() => localStorage.getItem("favicon"), []);
   const prefix = useMemo(
     () => resolveTitle(pathname, state?.title),
     [pathname, state?.title]
   );
+
   const title = useMemo(
     () => (prefix ? `${t(prefix)} - ${appName}` : appName),
-    [t, prefix, appName]
+    [t, prefix]
   );
+
   const manifestUrl = useManifestUrl(appName, logo);
 
   return (
