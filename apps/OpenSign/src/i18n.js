@@ -5,27 +5,35 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 i18n
   .use(Backend)
-  .use(LanguageDetector) // Use LanguageDetector directly without creating an instance
+  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json"
     },
-    fallbackLng: "en", // Fallback to English if no other language is detected
+
+    // Define português como idioma principal
+    lng: "pt",
+
+    // Fallback caso algo não esteja traduzido
+    fallbackLng: "en",
+
     detection: {
-      // Specifies the default language to fall back to if the detected language is not available.
       order: ["localStorage", "navigator"],
-      // Defines where the detected language should be cached.
       caches: ["localStorage"]
     },
-    ns: ["translation"], // default namespace
-    defaultNS: "translation", // default namespace
-    //Enables debug mode, which outputs detailed logs to the console about the translation process.
+
+    ns: ["translation"],
+    defaultNS: "translation",
+
     debug: false,
+
     interpolation: {
-      escapeValue: false // Not needed for react as it escapes by default
+      escapeValue: false
     },
-    whitelist: ["en", "es", "fr", "it", "de", "hi", "kr"] // List of allowed languages
+
+    // Adiciona português à lista de idiomas suportados
+    supportedLngs: ["pt", "en", "es", "fr", "it", "de", "hi", "kr"]
   });
 
 export default i18n;
