@@ -472,8 +472,8 @@ const Forms = (props) => {
             Description: "",
             Note:
               props.title === "Sign Yourself"
-                ? "Note to myself"
-                : "Please review and sign this document",
+                ? "Nota para mim"
+                : "Por favor, reveja e assine este documento",
             TimeToCompleteDays: 15,
             SendinOrder: sendinorder,
             password: "",
