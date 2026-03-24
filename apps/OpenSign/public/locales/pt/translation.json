@@ -868,10 +868,10 @@
   "hide": "Ocultar",
   "select-timezone": "Selecionar fuso horário",
   "date-format": "Formato da data",
-  "document-download-filename-format": "Formato do nome do ficheiro ao descarregar"
+  "document-download-filename-format": "Formato do nome do ficheiro ao descarregar",
   "enable-tour": "Ativar visita guiada",
   "notify-on-signatures": "Notificar sobre assinaturas",
-  "redirect-url": "URL de redirecionamento"
+  "redirect-url": "URL de redirecionamento",
 
   "enable-tour-help": {
   "p1": "Ativa uma visita guiada para ajudar os utilizadores a compreender como utilizar a aplicação.",
@@ -882,4 +882,4 @@
 "notify-on-signatures-help": {
   "note": "O criador do documento recebe uma notificação por email sempre que um signatário assina."
 }
-}
+
