@@ -872,14 +872,12 @@
   "enable-tour": "Ativar visita guiada",
   "notify-on-signatures": "Notificar sobre assinaturas",
   "redirect-url": "URL de redirecionamento",
-
   "enable-tour-help": {
   "p1": "Ativa uma visita guiada para ajudar os utilizadores a compreender como utilizar a aplicação.",
   "p2": "Quando ativado, será apresentado um tutorial passo a passo na interface.",
   "p3": "Pode desativar esta opção a qualquer momento nas definições."
 },
-
-"notify-on-signatures-help": {
+  "notify-on-signatures-help": {
   "note": "O criador do documento recebe uma notificação por email sempre que um signatário assina."
 }
 }
