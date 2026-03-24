@@ -81,6 +81,30 @@
   "register": "Registar",
   "signyour-self-button": "Assine o documento sem adicionar outros destinatários",
   "requestsign-button": "Solicite assinaturas a outras pessoas e a si próprio",
+  "signyour-self-description": "Use este formulário para assinar o documento sozinho, sem adicionar outras pessoas",
+  "requestsign-description": "Use este formulário para solicitar assinaturas a outras pessoas e também a si",
+  "template-form-description": "Crie um modelo reutilizável para enviar documentos para assinatura.",
+  "file-input-label": "Ficheiro (pdf, png, jpg, jpeg, docx)",
+  "choose-files": "Escolher ficheiros",
+  "no-file-selected": "Nenhum ficheiro selecionado",
+  "review-sign-note": "Por favor reveja e assine este documento",
+  "advanced-options": "Opções avançadas",
+  "hide-advanced-options": "Ocultar opções avançadas",
+  "form-title-1": "Configurações do envio",
+  "form-title-2": "Configurações adicionais",
+  "allowed-signature-types": "Tipos de assinatura permitidos",
+  "default": "Padrão",
+  "time-to-complete-days": "Tempo para concluir (dias)",
+  "enable-tour-help": {
+    "p1": "Ativa uma visita guiada para os signatários durante o processo de assinatura."
+  },
+  "notify-on-signatures-help": {
+    "p1": "O criador do documento recebe uma notificação por email sempre que um signatário assina."
+  },
+  "pen-colors-help": "Escolha as cores de caneta disponíveis para os widgets de Assinatura e Iniciais.",
+  "redirect-url-help": "Introduza o URL para onde o utilizador será redirecionado após concluir a assinatura.",
+  "12hr": "12 horas",
+  "24hr": "24 horas",
   "sidebar": {
     "Dashboard": "Painel",
     "Sign yourself": "Assinar você mesmo",
@@ -231,6 +255,7 @@
   "document-title": "Título do documento",
   "title": "Título",
   "description": "Descrição",
+  "note": "Nota",
   "time-to-complete": "Tempo para concluir (dias)",
   "send-in-order": "Enviar por ordem",
   "send-in-order-help": {
@@ -261,6 +286,7 @@
   "create": "Criar",
   "signers": "Signatários",
   "signers-help": "Comece a escrever o nome de um contacto para ver sugestões de signatários dos seus contactos guardados ou adicione novos. Organize a ordem de assinatura adicionando os signatários na sequência desejada. Utilize o botão '+' para incluir signatários e o 'x' para os remover. Cada signatário receberá um aviso por email para assinar o documento pela ordem apresentada.",
+  "bcc": "Cópia oculta (Bcc)",
   "bcc-help": "Comece a escrever o nome de um contacto para ver sugestões dos seus contactos guardados ou adicione novos. Utilize o botão '+' para adicionar um utilizador e o 'x' para o remover. O email do utilizador selecionado será adicionado como Bcc (cópia oculta). Cada utilizador receberá uma notificação por email assim que o documento estiver concluído.",
   "add-signer": "Adicionar signatário",
   "contact-not-found": "Contacto não encontrado",
@@ -429,6 +455,7 @@
     "black": "preto",
     "yellow": "amarelo"
   },
+  "pen-colors": "Cores da caneta",
   "my-initials": "As minhas iniciais",
   "upload": "Carregar",
   "initial-teb": "Iniciais",
@@ -805,6 +832,7 @@
   "expires": "Expira",
   "redirecting-you-in": "A redirecionar em {{redirectTimeLeft}} seg...",
   "widgets": "Widgets",
+  "general": "Geral",
   "document-id": "ID do documento",
   "sent-date": "Data de envio",
   "status": "Estado",
@@ -837,5 +865,8 @@
   "previous": "Anterior",
   "show-more": "Mostrar mais",
   "optional-details": "Detalhes opcionais",
-  "hide": "Ocultar"
+  "hide": "Ocultar",
+  "select-timezone": "Selecionar fuso horário",
+  "date-format": "Formato da data",
+  "document-download-filename-format": "Formato do nome do ficheiro ao descarregar"
 }
