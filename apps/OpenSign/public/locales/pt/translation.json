@@ -869,4 +869,7 @@
   "select-timezone": "Selecionar fuso horário",
   "date-format": "Formato da data",
   "document-download-filename-format": "Formato do nome do ficheiro ao descarregar"
+  "enable-tour": "Ativar visita guiada",
+  "notify-on-signatures": "Notificar sobre assinaturas",
+  "redirect-url": "URL de redirecionamento"
 }
