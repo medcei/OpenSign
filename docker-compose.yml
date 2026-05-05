@@ -4,6 +4,7 @@ services:
     restart: unless-stopped
     volumes:
       - 'mongo-data:/data/db'
+
   server:
     build:
       context: .
@@ -14,14 +15,24 @@ services:
     expose:
       - '8080'
     environment:
-      PUBLIC_URL: 'https://sign.medcei.com'
-      SERVER_URL: 'https://api-sign.medcei.com/app'
-      MONGODB_URI: 'mongodb://mongo:27017/OpenSignDB'
-      MASTER_KEY: 9fd4sdf9sdf9sdf9sdf9sdf9
-      PARSE_MOUNT: /app
-      APP_ID: opensign
-      USE_LOCAL: 'true'
-      SMTP_ENABLE: 'true'
+      PUBLIC_URL: ${PUBLIC_URL}
+      SERVER_URL: ${SERVER_URL}
+      MONGODB_URI: ${MONGODB_URI}
+      MASTER_KEY: ${MASTER_KEY}
+      PARSE_MOUNT: ${PARSE_MOUNT}
+      APP_ID: ${APP_ID}
+      USE_LOCAL: ${USE_LOCAL}
+      SMTP_ENABLE: ${SMTP_ENABLE}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_USER_EMAIL: ${SMTP_USER_EMAIL}
+      SMTP_PASS: ${SMTP_PASS}
+      MAILGUN_API_KEY: ${MAILGUN_API_KEY}
+      MAILGUN_DOMAIN: ${MAILGUN_DOMAIN}
+      MAILGUN_SENDER: ${MAILGUN_SENDER}
+      PFX_BASE64: ${PFX_BASE64}
+      PASS_PHRASE: ${PASS_PHRASE}
     labels:
       - 'traefik.enable=true'
       - 'traefik.docker.network=coolify'
@@ -32,6 +43,7 @@ services:
     networks:
       - default
       - coolify
+
   client:
     build:
       context: .
@@ -42,9 +54,9 @@ services:
     expose:
       - '3000'
     environment:
-      PUBLIC_URL: 'https://sign.medcei.com'
-      REACT_APP_SERVERURL: 'https://api-sign.medcei.com/app'
-      REACT_APP_APPID: opensign
+      PUBLIC_URL: ${PUBLIC_URL}
+      REACT_APP_SERVERURL: ${REACT_APP_SERVERURL}
+      REACT_APP_APPID: ${REACT_APP_APPID}
       GENERATE_SOURCEMAP: 'false'
     labels:
       - 'traefik.enable=true'
@@ -56,8 +68,10 @@ services:
     networks:
       - default
       - coolify
+
 volumes:
   mongo-data: null
+
 networks:
   coolify:
     external: true
