@@ -21,7 +21,7 @@ services:
       PARSE_MOUNT: /app
       APP_ID: opensign
       USE_LOCAL: 'true'
-      SMTP_ENABLE: 'false'
+      SMTP_ENABLE: 'true'
     labels:
       - 'traefik.enable=true'
       - 'traefik.docker.network=coolify'
